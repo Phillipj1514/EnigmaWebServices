@@ -1,7 +1,6 @@
-import os
-import datetime
+import os, datetime
 from app import app
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash,abort, jsonify,g
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
@@ -14,6 +13,8 @@ from app.models import *
 # Routing for your application.
 ###
 
+from app import api
+
 @app.route('/')
 def home():
     """Render website's home page."""
@@ -23,6 +24,8 @@ def home():
 def about():
     """Render profile creation page for the website"""
     return render_template('about.html')
+
+
 
 # @app.route('/profile', methods=['POST', 'GET'])
 # def profile():
