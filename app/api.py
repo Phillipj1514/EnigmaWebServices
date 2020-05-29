@@ -43,7 +43,7 @@ def merchantRegister():
             db.session.add(merchant)
             db.session.commit()
             return successResponse({"message": "Merchant  successfully registered"}),201
-    # If the form fail to submit it returns an error message
+    # If the form fail to submit it returns an error messag
     return errorResponse(form_errors(merchantRegForm)+submission_errors),400
 
 def successResponse(message):
