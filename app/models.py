@@ -50,11 +50,13 @@ class Line(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     merchantID = db.Column(db.Integer)
     queue = db.Column(db.Text)
+    count = db.Column(db.Integer)
     waitTime = db.Column(db.Integer)
 
-    def __init__(self, merchantID, queue, waitTime):
+    def __init__(self, merchantID, queue, count, waitTime):
         self.merchantID = merchantID
         self.queue = queue
+        self.count = count
         self.waitTime = waitTime
 
     def is_authenticated(self):
@@ -75,7 +77,42 @@ class Line(db.Model):
     def __repr__(self):
         return '<Line %r>' % (self.id)
 
-        
+
+class Customer(db.Model):
+    __tablename__ = 'customers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    merchantID = db.Column(db.Integer)
+    queueID = db.Column(db.Integer)
+    code = db.Column(db.String(500))
+    waitTime = db.Column(db.Integer)
+
+    def __init__(self, merchantID, queueID, code, waitTime):
+        self.merchantID = merchantID
+        self.queueID = queueID
+        self.queue = queue
+        self.waitTime = waitTime
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.id)  # python 2 support
+        except NameError:
+            return str(self.id)  # python 3 support
+
+    def __repr__(self):
+        return '<Customer %r>' % (self.id)
+
+
+
 class JWTBlacklist(db.Model):
     __tablename__ = 'jwtspoils'
 

@@ -24,6 +24,7 @@ def form_errors(form):
             error_messages.append(message)
 
     return error_messages
+# Merchant regitration 
 
 @app.route('/api/register', methods=['POST'])
 def merchantRegister():
@@ -63,6 +64,7 @@ def merchantRegister():
     # If the form fail to submit it returns an error messag
     return errorResponse(form_errors(merchantRegForm)+submission_errors),400
 
+# Merchant login
 @app.route('/api/login', methods=['POST'])
 def merchantLogin():
     merchantLogin = MerchantLogin(csrf_enabled=False)
@@ -83,7 +85,7 @@ def merchantLogin():
         # Add user validation error
         submission_errors.append("email or password invallid")
     return errorResponse(form_errors(merchantLogin)+submission_errors)
-
+# merchant logout
 @app.route('/api/logout', methods=['GET'])
 @requires_auth
 def merchantLogout():
@@ -91,6 +93,37 @@ def merchantLogout():
     db.session.add(spoiltoken)
     db.session.commit()
     return successResponse({"message": "User successfully logged out."})
+
+# Gets a list of all the merchants data
+@app.route('/api/merchants', methods=['GET'])
+def allMerchants():
+    merchants =  Merchant.query.order_by(Merchant.name).all()
+    merchants_data = []
+    if len(merchants) > 0:
+        for merchant in merchants:
+            logofile = "uploads/"+merchant.logo
+            mDetail = {
+                "id": merchant.id,
+                "name": merchant.name,
+                "address": merchant.address,
+                "location": merchant.location,
+                "logo-image":url_for('static', filename=logofile, _external=True),
+                "email": merchant.email,
+                "estimated-Wait-Time":merchant.estimatedWaitTime,
+                "joined-on": merchant.joined_on.strftime("%m/%d/%Y, %H:%M:%S")
+            }
+            merchants_data.append(mDetail)
+    return successResponse(merchants_data)
+
+@app.route('/api/line', methods=['GET'])
+@requires_auth
+def merchantLineInfo():
+    return null
+
+
+
+
+# JSON Responses
 
 def successResponse(message):
     return jsonify(message )
