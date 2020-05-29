@@ -5,29 +5,45 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 
 
-class profileForm(FlaskForm):
-    first_name = StringField('First Name', 
+class MerchantLogin(FlaskForm):
+
+     email = StringField('Email', 
+        validators=[DataRequired(), Email(), InputRequired()], 
+        description="123@abc.com")
+
+    password = StringField('Password', 
         validators=[DataRequired(), InputRequired()])
 
-    last_name = StringField('Last Name', 
+
+
+class MerchantRegistration(FlaskForm):
+    name = StringField('Company Name', 
         validators=[DataRequired(), InputRequired()])
 
-    gender = SelectField('Gender',
-        validators=[DataRequired()],
-        choices=[('Male', 'Male'), ('Female', 'Female')], 
-        default=('male','Male'))
+    address = StringField('Company Address', 
+        validators=[DataRequired(), InputRequired()])
+
+    location = StringField('Location', 
+        validators=[DataRequired(), InputRequired()], 
+        description="kingston, Jamaica")
 
     email = StringField('Email', 
         validators=[DataRequired(), Email(), InputRequired()], 
         description="123@abc.com")
 
-    location = StringField('Location', 
-        validators=[DataRequired(), InputRequired()], 
-        description="kingston")
-
-    biography  = TextAreaField('Biography',
+    password = PasswordField('Password', 
         validators=[DataRequired(), InputRequired()])
-
-    image = FileField('Profile Picture', 
+    confirmPassword = PasswordField('Confrim Password', 
+        validators=[DataRequired(), InputRequired()])
+    
+    logo = FileField('Company Logo', 
         validators=[FileRequired(),
         FileAllowed(['jpg', 'png', 'Images only!'])])
+
+    estWaitTime = StringField('Estimated Wait Time', 
+        validators=[],
+        description="Set to 10 minutes by default")
+
+    
+    
+    

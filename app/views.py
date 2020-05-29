@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for, flash,abort, json
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
-#from .forms  import profileForm
+from .forms  import *
 from app.models import *
 
 
@@ -12,7 +12,7 @@ from app.models import *
 ###
 # Routing for your application.
 ###
-
+# The Api fopr the system 
 from app import api
 
 @app.route('/')
