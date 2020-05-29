@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField
 from wtforms.validators import InputRequired, DataRequired, Email
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
@@ -33,16 +33,19 @@ class MerchantRegistration(FlaskForm):
 
     password = PasswordField('Password', 
         validators=[DataRequired(), InputRequired()])
-    confirmPassword = PasswordField('Confrim Password', 
+
+    confirmPassword = PasswordField('Confirm Password', 
         validators=[DataRequired(), InputRequired()])
+    
+    estWaitTime = IntegerField('Estimated Wait Time', 
+        validators=[],
+        description="Set to 10 minutes by default")
     
     logo = FileField('Company Logo', 
         validators=[FileRequired(),
         FileAllowed(['jpg', 'png', 'Images only!'])])
 
-    estWaitTime = StringField('Estimated Wait Time', 
-        validators=[],
-        description="Set to 10 minutes by default")
+  
 
     
     

@@ -1,16 +1,18 @@
 from . import db
+from werkzeug.security import generate_password_hash
+
 
 class Merchant(db.Model):
     __tablename__ = 'merchants'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    address = db.Column(db.String(100))
+    address = db.Column(db.Text)
     location = db.Column(db.String(100))
     logo = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(100))
-    estimatedWaitTime = db.Column(db.Integer)
+    estimatedWaitTime = db.Column(db.Float)
     joined_on = db.Column(db.DateTime)
 
     def __init__(self, name, address, location, logo, email, password, estimatedWaitTime, joined_on):
