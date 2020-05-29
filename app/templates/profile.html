@@ -1,0 +1,48 @@
+{% extends "base.html"%}
+
+{% block main%}
+<div class = "container form_base">
+    <h1> Add Profile </h1>
+    <div class = "strip"></div>
+    <div class ="form_main profile_main">
+        <div >
+            {% include "flash_messages.html"%}
+        </div>
+        <div class = "profile_inner">
+            <form class = "form-group" method="POST" enctype="multipart/form-data" action="{{ url_for('profile') }}">
+                {{ form.csrf_token }}
+                <div class ="formfields">
+                    {{ form.first_name.label }}<br/>
+                    {{ form.first_name(size=40, class="form-control") }}<br/>
+                </div>
+                <div class ="formfields">
+                    {{ form.last_name.label }}<br/>
+                    {{ form.last_name(size=40,class="form-control") }}<br/>
+                </div><br/>
+                <div class ="formfields">
+                    {{ form.gender.label }}<br/>
+                    {{ form.gender(class="form-control", placeholder="Select Gender") }}<br/>
+                </div>
+                <div class ="formfields">
+                    {{ form.email.label }}<br/>
+                    {{ form.email(size=40, class="form-control", placeholder="eg. johnpaul@profile.com") }}<br/>
+                </div>
+                <div class ="formfields">
+                    {{ form.location.label }}<br/>
+                    {{ form.location(size=40, class="form-control", placeholder="eg. Kingston, Jamacia") }}<br/>
+                </div>
+                <div class ="formfields">
+                    {{ form.biography.label }}<br/>
+                    {{ form.biography(size=40, class="form-control") }}<br/>
+                </div>
+                <div class ="formfields">
+                    {{ form.image.label }}<br>
+                    {{ form.image(class="form-control-file") }}
+                </div><br>
+                <span></span><br/>
+                <button type="submit" name="submit" class="buttons btn btn-success " >Add Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}
