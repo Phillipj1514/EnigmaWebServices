@@ -7,7 +7,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 class MerchantLogin(FlaskForm):
 
-     email = StringField('Email', 
+    email = StringField('Email', 
         validators=[DataRequired(), Email(), InputRequired()], 
         description="123@abc.com")
 
