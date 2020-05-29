@@ -45,7 +45,6 @@ def merchantRegister():
             return successResponse({"message": "Merchant  successfully registered"}),201
     # If the form fail to submit it returns an error message
     return errorResponse(form_errors(merchantRegForm)+submission_errors),400
-    return successResponse({"successs":"hurray"})
 
 def successResponse(message):
     return jsonify(message )
