@@ -7,6 +7,8 @@ from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from .forms  import *
 from app.models import *
+from app.jwt import *
+
 
 # Here we define a function to collect form errors from Flask-WTF
 # which we can later use
@@ -73,14 +75,22 @@ def merchantLogin():
         if merchant is not None and check_password_hash(merchant.password, password):
             # On successfuly verification create the user payload with the user id 
             # and generate the user token
-            # payload = {"userid":user.id,"time":datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}
-            # token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
-            # return successResponse({'message':username+"Merchant successfully logged in.",
-            #                             'token':token})
-             return successResponse({'message':"Merchant successfully logged in."})
+            payload = {"userid":merchant.id,"time":datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}
+            token = jwt.encode(payload, app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            return successResponse({'message':merchant.name+" successfully logged in.",
+                                        'token':token})
+            #  return successResponse({'message':"Merchant successfully logged in."})
         # Add user validation error
         submission_errors.append("email or password invallid")
     return errorResponse(form_errors(merchantLogin)+submission_errors)
+
+@app.route('/api/logout', methods=['GET'])
+@requires_auth
+def merchantLogout():
+    spoiltoken = JWTBlacklist(g.current_token)
+    db.session.add(spoiltoken)
+    db.session.commit()
+    return successResponse({"message": "User successfully logged out."})
 
 def successResponse(message):
     return jsonify(message )

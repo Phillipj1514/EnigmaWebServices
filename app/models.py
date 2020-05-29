@@ -74,3 +74,31 @@ class Line(db.Model):
 
     def __repr__(self):
         return '<Line %r>' % (self.id)
+
+        
+class JWTBlacklist(db.Model):
+    __tablename__ = 'jwtspoils'
+
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.Text)
+
+    def __init__(self, token):
+        self.token = token
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.id)  # python 2 support
+        except NameError:
+            return str(self.id)  # python 3 support
+
+    def __repr__(self):
+        return '<JWTSPOILS %r>' % (self.id)
