@@ -1,0 +1,13 @@
+#Files to ignore when adding and committing files to a repository.
+
+#virtualenv
+.venv/
+venv/
+
+#Editors
+.vscode/
+.idea
+
+_pycache__/
+*.py[cod]
+*$py.class
