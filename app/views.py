@@ -1,5 +1,5 @@
 import os, datetime
-from app import app
+from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash,abort, jsonify,g
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import check_password_hash
@@ -69,6 +69,7 @@ def registration():
         flash_errors(merchantRegForm)
     return render_template('registration.html', form = merchantRegForm)
 
+# Page to login user
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     merchantLogin = MerchantLogin()
@@ -81,13 +82,21 @@ def login():
         if merchant is not None and check_password_hash(merchant.password, password):
             # On successfuly verification create the user payload with the user id 
             # and generate the user token
-           flash("login successful")
+           login_user(merchant)
+           flash("login successful", 'success')
         else:
         # Add user validation error
             submission_errors.append("email or password invallid")
-            flash(submission_errors)
+            flash(submission_errors, 'danger')
     flash_errors(merchantLogin)
     return render_template('login.html', form = merchantLogin)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('home'))
 
 
 # @app.route('/profile', methods=['POST', 'GET'])
@@ -129,6 +138,12 @@ def login():
 #     uprofile = Profiles.query.get(id)
 #     return render_template('userprofile.html', profile = uprofile)
 
+
+# user_loader callback. This callback is used to reload the user object from
+# the user ID stored in the session
+@login_manager.user_loader
+def load_user(id):
+    return Merchant.query.get(int(id))
 
 # Flash errors from the form if validation fails
 def flash_errors(form):
