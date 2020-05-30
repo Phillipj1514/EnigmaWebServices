@@ -235,13 +235,15 @@ def getMerchantDetails(merchant_id):
 def getcustomer(customer_code):
     customer = Customer.query.filter_by(code=customer_code).first()
     if(not customer is None):
+        line =  Line.query.filter_by(id=customer.queueID).first()
         cDetails={
                     "id":customer.id,
                     "merchantID": customer.merchantID,
                     "queueID": customer.queueID,
                     "code": customer.code,
                     "position": customer.position,
-                    "wait-time": customer.waitTime
+                    "wait-time": customer.waitTime,
+                    "line-count":line.count
                 }
         return successResponse(cDetails)
     return errorResponse("no such customer"),400
