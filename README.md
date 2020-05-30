@@ -1,6 +1,5 @@
 # Enigma Virtual Line Up
-This is a software solution to alleviate the line up problems that have arrived 
-due to the covid - 19 pandemic
+This is a software solution to alleviate the line up problem that has worsen due to Covid-19 
 
 mobile-app
 -----------
@@ -12,4 +11,4 @@ This is been run @ https://damp-plains-24002.herokuapp.com/
 
 PostMan API Documentation
 ----------------------------
-Not available as yet
+https://documenter.getpostman.com/view/8140774/SztD6nfZ
