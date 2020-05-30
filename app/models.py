@@ -10,7 +10,7 @@ class Merchant(db.Model):
     address = db.Column(db.Text)
     location = db.Column(db.String(100))
     logo = db.Column(db.String(100))
-    email = db.Column(db.String(100))
+    email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     estimatedWaitTime = db.Column(db.Float)
     joined_on = db.Column(db.DateTime)
@@ -84,13 +84,15 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     merchantID = db.Column(db.Integer)
     queueID = db.Column(db.Integer)
+    position = db.Column(db.Integer)
     code = db.Column(db.String(500))
     waitTime = db.Column(db.Integer)
 
-    def __init__(self, merchantID, queueID, code, waitTime):
+    def __init__(self, merchantID, queueID, position, code, waitTime):
         self.merchantID = merchantID
         self.queueID = queueID
-        self.queue = queue
+        self.position = position
+        self.code = code
         self.waitTime = waitTime
 
     def is_authenticated(self):

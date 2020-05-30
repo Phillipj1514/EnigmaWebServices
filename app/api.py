@@ -1,5 +1,6 @@
 import os
 import datetime
+from time import time
 from app import app
 from flask import render_template, request, redirect, url_for, flash,abort, jsonify,g
 from flask_login import login_user, logout_user, current_user, login_required
@@ -60,6 +61,12 @@ def merchantRegister():
             merchant = Merchant(name, address, location, logo_name, email, password, estTime, datetime.datetime.now())
             db.session.add(merchant)
             db.session.commit()
+            merchant = Merchant.query.filter_by(email=email).first()
+            if(not merchant is None):
+                line = Line(merchant.id,"",0,merchant.estimatedWaitTime)
+                db.session.add(line)
+                db.session.commit()
+                return successResponse({"message": "Merchant  successfully registered 2"}),201
             return successResponse({"message": "Merchant  successfully registered"}),201
     # If the form fail to submit it returns an error messag
     return errorResponse(form_errors(merchantRegForm)+submission_errors),400
@@ -94,7 +101,7 @@ def merchantLogout():
     db.session.commit()
     return successResponse({"message": "User successfully logged out."})
 
-# Gets a list of all the merchants data
+# Gets a list of all the merchants and their data
 @app.route('/api/merchants', methods=['GET'])
 def allMerchants():
     merchants =  Merchant.query.order_by(Merchant.name).all()
@@ -114,6 +121,69 @@ def allMerchants():
             }
             merchants_data.append(mDetail)
     return successResponse(merchants_data)
+
+# Get the merchant lines
+@app.route('/api/<merchant_id>/line', methods=['GET'])
+def merchantsLine(merchant_id):
+    line =  Line.query.filter_by(merchantID=merchant_id).first()
+    lineDetails = {"result":"no line available"}
+    if(not line is None):
+        customerInLine = []
+        customers = line.queue.split(",")
+        customers = [int(i) for i in customers if i.isdigit()] 
+        for customerID in customers:
+            customer = Customer.query.filter_by(id=int(customerID)).first()
+            if(not customer is None):
+                cDetails={
+                    "id":customer.id,
+                    "merchantID": customer.merchantID,
+                    "queueID": customer.queueID,
+                    "code": customer.code,
+                    "position": customer.position,
+                    "wait-time": customer.waitTime
+                }
+                customerInLine.append(cDetails)
+
+        lineDetails = {
+            "merchantID": line.merchantID,
+            "id": line.id,
+            "default-wait-time":line.waitTime,
+            "count": line.count,
+            "queue": customerInLine
+        }
+    return successResponse(lineDetails)
+
+# add line to a merchant
+@app.route('/api/<merchant_id>/line', methods=['POST'])
+def addMerchantLine(merchant_id):
+    merchant = Merchant.query.filter_by(id=merchant_id).first()
+    if(not merchant is None):
+        line = Line(merchant_id,"",0,merchant.estimatedWaitTime)
+        db.session.add(line)
+        db.session.commit()
+        return successResponse("line added")
+    return errorResponse("line wasnt added"),400
+
+# add customer to merchant's  line
+@app.route('/api/<merchant_id>/customer', methods=['POST'])
+def addCustomerTOLine(merchant_id):
+    merchant = Merchant.query.filter_by(id=merchant_id).first()
+    line =  Line.query.filter_by(merchantID=merchant_id).first()
+    if(not merchant is None and not line is None):
+        customer_code = str(int(time()))
+        customer = Customer(merchant.id, line.id, line.count,customer_code,line.count*line.waitTime)
+        db.session.add(customer)
+        db.session.commit()
+        customer = Customer.query.filter_by(code=customer_code).first()
+        line.count+=1
+        line.queue+=str(customer.id)+","
+        db.session.commit()
+        return successResponse("customer add to line") 
+    return errorResponse("customer wasnt added"),400
+    
+
+    
+
 
 @app.route('/api/line', methods=['GET'])
 @requires_auth
