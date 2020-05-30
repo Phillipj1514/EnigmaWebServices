@@ -1,0 +1,40 @@
+{% extends "base.html"%}
+
+{% block main%}
+<div class = "container d-flex justify-content-center">
+    <div class= "flex-row">
+        <div>
+            <h1>Merchant Dashboard</h1>
+        </div>
+        <div >
+            {% include "flash_messages.html"%}
+        </div>
+        <div>
+            <!-- Table withe the users -->
+            <div>
+                <table  class="table table-hover" id="customers">  
+                    <thead class="thead-dark">
+                        <tr>
+                        <th scope="col">Customer Reference Number</th>
+                        <th scope="col">Wait Time (HR:MIN)</th>
+                        <th scope="col">Position in Line</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for customer in details.line.queue%} 
+                        <tr>
+                            <th scope="row">{{customer.code}}</th>
+                            <td>00:{{customer.wait_time}}</td>
+                            <td class="number">{{customer.position}}</td>
+                          </tr>
+                        {%endfor%} 
+                        
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock%}

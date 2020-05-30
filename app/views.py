@@ -84,6 +84,7 @@ def login():
             # and generate the user token
            login_user(merchant)
            flash("login successful", 'success')
+           return redirect(url_for('dashboard'))
         else:
         # Add user validation error
             submission_errors.append("email or password invallid")
@@ -98,6 +99,53 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('home'))
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    merchant_id = current_user.id
+    merchant = Merchant.query.filter_by(id=merchant_id).first()
+    line =  Line.query.filter_by(merchantID=merchant_id).first()
+    lineDetails = {}
+    mDetail = {}
+    if(not line is None):
+        customerInLine = []
+        customers = line.queue.split(",")
+        customers = [int(i) for i in customers if i.isdigit()] 
+        for customerID in customers:
+            customer = Customer.query.filter_by(id=int(customerID)).first()
+            if(not customer is None):
+                cDetails={
+                    "id":customer.id,
+                    "merchantID": customer.merchantID,
+                    "queueID": customer.queueID,
+                    "code": customer.code,
+                    "position": customer.position,
+                    "wait_time": customer.waitTime
+                }
+                customerInLine.append(cDetails)
+
+        lineDetails = {
+            "merchantID": line.merchantID,
+            "id": line.id,
+            "default_wait_time":line.waitTime,
+            "count": line.count,
+            "queue": customerInLine
+        }
+    if(not merchant is None ):
+        logofile = "uploads/"+merchant.logo
+        mDetail = {
+            "id": merchant.id,
+            "name": merchant.name,
+            "address": merchant.address,
+            "location": merchant.location,
+            "logo-image":url_for('static', filename=logofile, _external=True),
+            "email": merchant.email,
+            "estimated-Wait-Time":merchant.estimatedWaitTime,
+            "joined-on": merchant.joined_on.strftime("%m/%d/%Y, %H:%M:%S"),
+            "line": lineDetails
+        }
+
+    return render_template('dashboard.html', details = mDetail)
 
 # @app.route('/profile', methods=['POST', 'GET'])
 # def profile():
