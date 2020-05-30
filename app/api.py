@@ -231,9 +231,51 @@ def getMerchantDetails(merchant_id):
     return errorResponse("something went wrong")
 
 # add customer to merchant's  line
-@app.route('/api/customer/<customer_id>/leave', methods=['GET'])
-def customerLeave(customer_id):
-    return null
+@app.route('/api/customer/<customer_code>', methods=['GET'])
+def getcustomer(customer_code):
+    customer = Customer.query.filter_by(code=customer_code).first()
+    if(not customer is None):
+        cDetails={
+                    "id":customer.id,
+                    "merchantID": customer.merchantID,
+                    "queueID": customer.queueID,
+                    "code": customer.code,
+                    "position": customer.position,
+                    "wait-time": customer.waitTime
+                }
+        return successResponse(cDetails)
+    return errorResponse("no such customer"),400
+
+
+
+# add customer to merchant's  line
+@app.route('/api/customer/<customer_code>/leave', methods=['GET'])
+def customerLeave(customer_code):
+    customer = Customer.query.filter_by(code=customer_code).first()
+    if(not customer is None):
+        customer_postion = customer.position
+        line =  Line.query.filter_by(id=customer.queueID).first()
+        if(not line is None):
+            customerInLine = []
+            customers = line.queue.split(",")
+            customers.remove(str(customer.id))
+            # update the system with new line count
+            line.queue = ",".join(customers)
+            line.count-=1
+            db.session.commit()
+            # Delete the current customer from the queue
+            db.session.delete(customer)
+            db.session.commit()
+            customers = [int(i) for i in customers if i.isdigit()] 
+            for customerID in customers:
+                customer = Customer.query.filter_by(id=int(customerID)).first()
+                if(not customer is None):
+                    if customer.position > customer_postion:
+                        customer.position-= 1
+                        customer.waitTime-=line.waitTime
+                        db.session.commit()
+            return successResponse("customer removed successfully")
+    return errorResponse("no such customer"),400
 
 
 @app.route('/api/line', methods=['GET'])
