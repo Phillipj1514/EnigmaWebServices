@@ -1,11 +1,108 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h1 class="page-header">Welcome to Enigma Vline</h1>
-<h3> The start of something big</h3>
-<ul>
-    <li><a href="{{ url_for('registration') }}">Registration</a></li>
-    <li> <a href="{{ url_for('login') }}">Login</a></li>
-</ul>
+<div class="w3-content w3-black w-100" style="max-width:1500px;">
+
+    <!-- Header with Slideshow -->
+    <header >
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="homepageStyles.css">
+        <script src="homepageJs.js"> </script>
+        
+    </header>
+    
+    
+    <!-- The App Section -->
+    <div class="w3-padding-64 w3-white">
+      <div class="w3-row-padding">
+        <div class="w3-col l8 m6">
+          <h1 class="w3-jumbo"><b>Welcome to VirtualQ</b></h1>
+          <p><span class="w3-xlarge">Keep Your Customers Safe and You're Business Efficient</span> With the help of Vline costomers can now reserve thier place in line and no longer have to wait at the door. They will be given an estimated waiting time which allows
+            them to properly schedule when they need to arrive and they will be notified when its thier time to come in. Nice, Easy and No Waiting .</p>
+          <button class="w3-button w3-light-grey w3-padding-large w3-section w3-hide-small" onclick="document.getElementById('download').style.display='block'">
+            <i class="fa fa-download"></i> Download mobile app
+          </button>
+          <p>Available for <i class="fa fa-android w3-xlarge w3-text-green"></i> <i class="fa fa-apple w3-xlarge"></i> <i class="fa fa-windows w3-xlarge w3-text-blue"></i></p>
+        </div>
+        <div class="w3-col l4 m6">
+          <div class="w3-center w3-hide-large w3-hide-medium">
+            <button class="w3-button w3-block w3-padding-large" onclick="document.getElementById('download').style.display='block'">
+              <i class="fa fa-download"></i> Download mobile app
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="download" class="w3-modal w3-animate-opacity">
+      <div class="w3-modal-content" style="padding:32px">
+        <div class="w3-container w3-white">
+          <i onclick="document.getElementById('download').style.display='none'" class="fa fa-remove w3-xlarge w3-button w3-transparent w3-right w3-xlarge"></i>
+          <h2 class="w3-wide">DOWNLOAD</h2>
+          <p>Download the app in AppStore, Google Play or Microsoft Store.</p>
+          <i class="fa fa-android w3-large"></i> <i class="fa fa-apple w3-large"></i> <i class="fa fa-windows w3-large"></i>
+          <p><input class="w3-input w3-border" type="text" placeholder="Enter e-mail"></p>
+          <button type="button" class="w3-button w3-block w3-padding-large w3-red w3-margin-bottom" onclick="document.getElementById('download').style.display='none'">Fake Download</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Clarity Section -->
+    <div class="w3-padding-64 w3-light-grey">
+      <div class="w3-row-padding">
+        <div class="w3-col l4 m6">
+          <img class="w3-image w3-round-large w3-hide-small w3-grayscale" src="{{ url_for('static',filename='uploads/applogo.png') }}" alt="App" width="335" height="471">
+        </div>
+        <div class="w3-col l8 m6">
+          <h1 class="w3-jumbo"><b>Clarity</b></h1>
+          <h1 class="w3-xxxlarge w3-text-red"><b>Wondering if this is for you?</b></h1>
+          <p><span class="w3-xlarge">Dont</span> Vline brings you and you're customer a way to keep safe and socially distant during this global pandemic.
+        While also saving the customers time, so choose to be safe, choose to be on time.</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="w3-container w3-padding-64 w3-dark-grey w3-center">
+      <h1 class="w3-jumbo"><b>Features</b></h1>
+    
+      <div class="w3-row" style="margin-top:64px">
+        <div class="w3-col s3">
+          <i class="fa fa-bolt w3-text-orange w3-jumbo"></i>
+          <p>Fast</p>
+        </div>
+        <div class="w3-col s3">
+          <i class="fa fa-heart w3-text-red w3-jumbo"></i>
+          <p>Easy</p>
+        </div>
+        <div class="w3-col s3">
+            <i class="fa fa-globe w3-text-amber w3-jumbo"></i>
+            <p>Accessible without data</p>
+          </div>
+          <div class="w3-col s3">
+            <i class="fa fa-user w3-text-sand w3-jumbo"></i>
+            <p>Safe</p>
+          </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-32 w3-light-grey w3-center w3-xlarge">
+      <div class="w3-section">
+        <i class="fa fa-facebook-official w3-hover-opacity"></i>
+        <i class="fa fa-instagram w3-hover-opacity"></i>
+        <i class="fa fa-snapchat w3-hover-opacity"></i>
+        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+        <i class="fa fa-twitter w3-hover-opacity"></i>
+        <i class="fa fa-linkedin w3-hover-opacity"></i>
+      </div>
+    </footer>
+    
+    
+    
+</div>
 
 {% endblock %}
