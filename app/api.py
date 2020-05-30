@@ -177,14 +177,29 @@ def addCustomerTOLine(merchant_id):
         line.count+=1
         line.queue+=str(customer.id)+","
         db.session.commit()
+        # Add chat to the customer
+        chat = Chats(merchant.id, customer.id)
+        db.session.add(chat)
+        db.session.commit()
+        chats = Chats.query.filter_by(customerID = customer.id).all()
+        rchat = None
+        for chat in chats:
+            if chat.merchantID == merchant.id:
+                rchat = chat
+                break
+        if not rchat is None:
+            customer.chatID = rchat.id
+            db.session.commit()
+
         result = {"result":"customer add to line",
             "code": customer_code,
+            "chatId":  rchat.id,
             "wait-time": customer.waitTime
         }
         return successResponse(result) 
     return errorResponse("customer wasnt added"),400
 
-# add customer to merchant's  line
+# get the merchant details
 @app.route('/api/<merchant_id>', methods=['GET'])
 def getMerchantDetails(merchant_id):
     merchant = Merchant.query.filter_by(id=merchant_id).first()
@@ -230,7 +245,7 @@ def getMerchantDetails(merchant_id):
         return successResponse(mDetail)
     return errorResponse("something went wrong")
 
-# add customer to merchant's  line
+# get specific customer
 @app.route('/api/customer/<customer_code>', methods=['GET'])
 def getcustomer(customer_code):
     customer = Customer.query.filter_by(code=customer_code).first()
@@ -250,7 +265,7 @@ def getcustomer(customer_code):
 
 
 
-# add customer to merchant's  line
+# allow customer to leave
 @app.route('/api/customer/<customer_code>/leave', methods=['GET'])
 def customerLeave(customer_code):
     customer = Customer.query.filter_by(code=customer_code).first()
@@ -278,6 +293,17 @@ def customerLeave(customer_code):
                         db.session.commit()
             return successResponse("customer removed successfully")
     return errorResponse("no such customer"),400
+
+# get customer chat if available
+@app.route('/api/chat/<chat_id>', methods=['GET'])
+def getChat(chat_id):
+    chat = Chats.query.filter_by(id=chat_id).first()
+    if(not chat is None):
+        chatDetails ={
+            "messages":chat.messages.split(",")
+        }
+        return successResponse(chatDetails)
+    return errorResponse("chat not available")
 
 
 @app.route('/api/line', methods=['GET'])

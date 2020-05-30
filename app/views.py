@@ -152,7 +152,14 @@ def dashboard():
 def checkTicket():
     checkingForm = TicketCheck()
     if request.method == 'POST' and checkingForm.validate_on_submit():
-        customer_code = checkingForm.customer_code.data
+        customer_code = ""
+        if not checkingForm.qrcode.data  is None:
+            qrcode = checkingForm.qrcode.data
+            qrcode_name = secure_filename(qrcode.filename)
+
+        if not checkingForm.customer_code.data is None:
+            customer_code = checkingForm.customer_code.data
+        # processing
         merchant_id = current_user.id
         merchant = Merchant.query.filter_by(id=merchant_id).first()
         line =  Line.query.filter_by(merchantID=merchant_id).first()

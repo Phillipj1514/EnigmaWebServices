@@ -84,6 +84,7 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     merchantID = db.Column(db.Integer)
     queueID = db.Column(db.Integer)
+    chatID = db.Column(db.Integer)
     position = db.Column(db.Integer)
     code = db.Column(db.String(500))
     waitTime = db.Column(db.Integer)
@@ -91,6 +92,7 @@ class Customer(db.Model):
     def __init__(self, merchantID, queueID, position, code, waitTime):
         self.merchantID = merchantID
         self.queueID = queueID
+        self.chatID = 0
         self.position = position
         self.code = code
         self.waitTime = waitTime
@@ -113,6 +115,37 @@ class Customer(db.Model):
     def __repr__(self):
         return '<Customer %r>' % (self.id)
 
+class Chats(db.Model):
+    __tablename__ = 'chatts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    merchantID = db.Column(db.Integer)
+    customerID = db.Column(db.Integer)
+    messages = db.Column(db.Text)
+
+
+    def __init__(self, merchantID, customerID):
+        self.merchantID = merchantID
+        self.customerID = customerID
+        self.messages = ""
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.id)  # python 2 support
+        except NameError:
+            return str(self.id)  # python 3 support
+
+    def __repr__(self):
+        return '<Chats %r>' % (self.id)
 
 
 class JWTBlacklist(db.Model):

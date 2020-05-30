@@ -47,9 +47,13 @@ class MerchantRegistration(FlaskForm):
 
 class TicketCheck(FlaskForm):
 
-    customer_code = StringField('Access Code', 
-        validators=[DataRequired(), InputRequired()], 
+    customer_code = StringField('Enter Access Code', 
+        validators=[], 
         description="The code the custimer was given when they joined the line")
+
+    qrcode = FileField('Upload QrCode', 
+        validators=[
+        FileAllowed(['jpg', 'png', 'Images only!'])])
 
   
 

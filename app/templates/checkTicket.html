@@ -13,13 +13,20 @@
             <div class = "">
                 <form class = "form-group" method="POST" enctype="multipart/form-data">
                     {{ form.csrf_token }}
+
+                    <h4>You may choose to scan a qr code or entet the customer access code</h4>
                     
                     <div class ="formfields">
                         {{ form.customer_code.label }}<br/>
                         {{ form.customer_code(size=80, class="form-control", placeholder="The code the custimer was given when they joined the line") }}<br/>
                     </div>
-                    
-                
+
+                    <h3>or</h3>
+                    <div class ="formfields">
+                        {{ form.qrcode.label }}<br>
+                        {{ form.qrcode(class="form-control-file") }}
+                    </div>
+                                    
                     <span></span><br/>
                     <button type="submit" name="submit" class="buttons btn btn-success " >Check</button>
                 </form>
