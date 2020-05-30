@@ -45,6 +45,12 @@ class MerchantRegistration(FlaskForm):
         validators=[FileRequired(),
         FileAllowed(['jpg', 'png', 'Images only!'])])
 
+class TicketCheck(FlaskForm):
+
+    customer_code = StringField('Access Code', 
+        validators=[DataRequired(), InputRequired()], 
+        description="The code the custimer was given when they joined the line")
+
   
 
     

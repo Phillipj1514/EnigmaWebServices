@@ -10,6 +10,19 @@
             {% include "flash_messages.html"%}
         </div>
         <div>
+            <div class = "d-flex justify-content flex-wrap my-1">
+                <!-- Company details -->
+                <div class = "w-25 mr-4">
+                    <img class="img-fluid rounded " src="{{ details.logo_image }}">
+                </div>
+                <div>
+                    <h2> {{details.name}}</h2>
+                    <p>{{details.address}}</p>
+                    <p>{{details.location}}</p>
+                </div>
+                
+
+            </div>
             <!-- Table withe the users -->
             <div>
                 <table  class="table table-hover" id="customers">  
@@ -25,7 +38,8 @@
                         <tr>
                             <th scope="row">{{customer.code}}</th>
                             <td>00:{{customer.wait_time}}</td>
-                            <td class="number">{{customer.position}}</td>
+                            <td class="number">{{customer.position}} <a href="{{url_for('login')}}" role="button" class="btn btn-success my-2 my-sm-0 ml-3">Speak with customer</a></td>
+                            <td></td>
                           </tr>
                         {%endfor%} 
                         

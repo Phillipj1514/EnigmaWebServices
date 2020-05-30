@@ -138,7 +138,7 @@ def dashboard():
             "name": merchant.name,
             "address": merchant.address,
             "location": merchant.location,
-            "logo-image":url_for('static', filename=logofile, _external=True),
+            "logo_image":url_for('static', filename=logofile, _external=True),
             "email": merchant.email,
             "estimated-Wait-Time":merchant.estimatedWaitTime,
             "joined-on": merchant.joined_on.strftime("%m/%d/%Y, %H:%M:%S"),
@@ -146,6 +146,47 @@ def dashboard():
         }
 
     return render_template('dashboard.html', details = mDetail)
+
+@app.route('/checkTicket',  methods=['POST', 'GET'])
+@login_required
+def checkTicket():
+    checkingForm = TicketCheck()
+    if request.method == 'POST' and checkingForm.validate_on_submit():
+        customer_code = checkingForm.customer_code.data
+        merchant_id = current_user.id
+        merchant = Merchant.query.filter_by(id=merchant_id).first()
+        line =  Line.query.filter_by(merchantID=merchant_id).first()
+        customer = Customer.query.filter_by(code=customer_code).first()
+        if(not customer is None):
+            if(customer.merchantID == merchant_id):
+                if customer.waitTime == 0:
+                    if(not line is None):
+                        customerInLine = []
+                        customers = line.queue.split(",")
+                        customers.remove(str(customer.id))
+                        # update the system with new line count
+                        line.queue = ",".join(customers)
+                        line.count-=1
+                        db.session.commit()
+                        # Delete the current customer from the queue
+                        db.session.delete(customer)
+                        db.session.commit()
+                        customers = [int(i) for i in customers if i.isdigit()] 
+                        for customerID in customers:
+                            customer = Customer.query.filter_by(id=int(customerID)).first()
+                            customer.position-= 1
+                            customer.waitTime-=line.waitTime
+                            db.session.commit()
+                        flash("Customer can be allowed on the inside", "success")
+                else:
+                    flash("The customer is too early", "danger")
+            else:
+                flash("Invalid Client / Wrong store","danger")
+        else:
+            flash("Invalid Client","danger")
+    
+    flash_errors(checkingForm)
+    return render_template('checkTicket.html', form= checkingForm)
 
 # @app.route('/profile', methods=['POST', 'GET'])
 # def profile():

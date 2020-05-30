@@ -170,7 +170,7 @@ def addCustomerTOLine(merchant_id):
     line =  Line.query.filter_by(merchantID=merchant_id).first()
     if(not merchant is None and not line is None):
         customer_code = str(int(time()))
-        customer = Customer(merchant.id, line.id, line.count,customer_code,line.count*line.waitTime)
+        customer = Customer(merchant.id, line.id, line.count+1,customer_code,line.count*line.waitTime)
         db.session.add(customer)
         db.session.commit()
         customer = Customer.query.filter_by(code=customer_code).first()
@@ -229,6 +229,11 @@ def getMerchantDetails(merchant_id):
         }
         return successResponse(mDetail)
     return errorResponse("something went wrong")
+
+# add customer to merchant's  line
+@app.route('/api/customer/<customer_id>/leave', methods=['GET'])
+def customerLeave(customer_id):
+    return null
 
 
 @app.route('/api/line', methods=['GET'])

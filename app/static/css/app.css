@@ -3,34 +3,5 @@ body {
     /* background-color: #cfe6ff; */
 }
 
-.form_base{
-    width: 50em;
-}
-.form_main{
-    background-color: white;
-    border-bottom-left-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
-    padding: 1em 2em;
 
-}
-.strip{
-    height: 0.5em;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-    background-color: blue;
-    margin-top: 1em;
-
-}
-.profile_main{
-}
-.profile_inner{
-    width: 70%;
-}
-.formfields{
-    /*margin-top: 0.1em;*/
-}
-
-.buttons{
-    width: 12em;
-}
 
