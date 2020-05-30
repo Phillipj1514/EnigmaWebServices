@@ -55,7 +55,12 @@ class TicketCheck(FlaskForm):
         validators=[
         FileAllowed(['jpg', 'png', 'Images only!'])])
 
-  
+class MessageForm(FlaskForm):
+
+    message = StringField('message', 
+        validators=[DataRequired(), InputRequired()], 
+        description="message to client")
+
 
     
     

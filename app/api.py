@@ -260,7 +260,25 @@ def getcustomer(customer_code):
                     "wait-time": customer.waitTime,
                     "line-count":line.count
                 }
-        return successResponse(cDetails)
+        return successResponse([cDetails])
+    return errorResponse("no such customer"),400
+
+# all customers
+@app.route('/api/customers', methods=['GET'])
+def getcustomers(customer_code):
+    customer = Customer.query.filter_by(code=customer_code).first()
+    if(not customer is None):
+        line =  Line.query.filter_by(id=customer.queueID).first()
+        cDetails={
+                    "id":customer.id,
+                    "merchantID": customer.merchantID,
+                    "queueID": customer.queueID,
+                    "code": customer.code,
+                    "position": customer.position,
+                    "wait-time": customer.waitTime,
+                    "line-count":line.count
+                }
+        return successResponse([cDetails])
     return errorResponse("no such customer"),400
 
 

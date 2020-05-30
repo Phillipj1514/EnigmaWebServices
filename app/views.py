@@ -195,6 +195,23 @@ def checkTicket():
     flash_errors(checkingForm)
     return render_template('checkTicket.html', form= checkingForm)
 
+@app.route('/chat/<customer_id>',methods=['POST', 'GET'])
+@login_required
+def clientsupport(customer_id):
+    messageForm = MessageForm()
+    msgs = []
+    customer = Customer.query.filter_by(id=customer_id).first()
+    chat = Chats.query.filter_by(id=customer.chatID).first()
+    if(not chat is None):
+        msg = chat.messages.split(",")
+        if request.method == 'POST' and messageForm.validate_on_submit():
+            message = messageForm.message.data
+            msgs.append(msg)
+            chat.messages = ",".join(msgs)
+            db.session.commit()
+        flash_errors(messageForm)
+    return render_template('clientsupport.html', form = messageForm, messages= msgs)
+
 # @app.route('/profile', methods=['POST', 'GET'])
 # def profile():
 #     """Render profile creation page for the website"""
