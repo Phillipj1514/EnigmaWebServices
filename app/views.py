@@ -25,6 +25,69 @@ def about():
     """Render profile creation page for the website"""
     return render_template('about.html')
 
+@app.route('/registration', methods=['POST', 'GET'])
+def registration():
+    """Render registration creation for the website"""
+    merchantRegForm = MerchantRegistration()
+    if request.method == 'POST' and merchantRegForm.validate_on_submit():
+        success = True
+        name = merchantRegForm.name.data
+        address = merchantRegForm.address.data
+        location = merchantRegForm.location.data
+        email = merchantRegForm.email.data
+        estTime = merchantRegForm.estWaitTime.data
+        logo  = merchantRegForm.logo.data
+        logo_name = secure_filename(logo.filename)
+
+        password = merchantRegForm.password.data
+        confirmed_password  = merchantRegForm.confirmPassword.data 
+
+        if(password != confirmed_password): 
+            success = False
+            submission_errors.append("password and confirm passowrd is different")
+        if(not Merchant.query.filter_by(name=name).first() is None): 
+            success = False
+            submission_errors.append("Company name unavailable")
+        if( not Merchant.query.filter_by(email=email).first() is None):
+            success = False
+            submission_errors.append("email already used")
+        # Save the data if the information entered is valid and new 
+        if(success):
+            logo.save(os.path.join(
+                app.config['UPLOAD_FOLDER'],logo_name
+            ))
+            merchant = Merchant(name, address, location, logo_name, email, password, estTime, datetime.datetime.now())
+            db.session.add(merchant)
+            db.session.commit()
+            merchant = Merchant.query.filter_by(email=email).first()
+            if(not merchant is None):
+                line = Line(merchant.id,"",0,merchant.estimatedWaitTime)
+                db.session.add(line)
+                db.session.commit()
+            flash("Account created successfully", "success")
+    # If the form fail to submit it returns an error messag
+        flash_errors(merchantRegForm)
+    return render_template('registration.html', form = merchantRegForm)
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    merchantLogin = MerchantLogin()
+    submission_errors = []
+    if request.method == 'POST' and merchantLogin.validate_on_submit():
+        success = True
+        email = merchantLogin.email.data
+        password = merchantLogin.password.data
+        merchant = Merchant.query.filter_by(email=email).first()
+        if merchant is not None and check_password_hash(merchant.password, password):
+            # On successfuly verification create the user payload with the user id 
+            # and generate the user token
+           flash("login successful")
+        else:
+        # Add user validation error
+            submission_errors.append("email or password invallid")
+            flash(submission_errors)
+    flash_errors(merchantLogin)
+    return render_template('login.html', form = merchantLogin)
 
 
 # @app.route('/profile', methods=['POST', 'GET'])

@@ -66,7 +66,6 @@ def merchantRegister():
                 line = Line(merchant.id,"",0,merchant.estimatedWaitTime)
                 db.session.add(line)
                 db.session.commit()
-                return successResponse({"message": "Merchant  successfully registered 2"}),201
             return successResponse({"message": "Merchant  successfully registered"}),201
     # If the form fail to submit it returns an error messag
     return errorResponse(form_errors(merchantRegForm)+submission_errors),400

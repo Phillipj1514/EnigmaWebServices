@@ -1,0 +1,36 @@
+{% extends "base.html"%}
+
+{% block main%}
+<div class = "container d-flex justify-content-center">
+    <div class= "flex-row">
+        <div>
+            <h1>Merchant Login</h1>
+        </div>
+        <div >
+            {% include "flash_messages.html"%}
+        </div>
+        <div>
+            <div class = "">
+                <form class = "form-group" method="POST" enctype="multipart/form-data" >
+                    {{ form.csrf_token }}
+                    
+                    <div class ="formfields">
+                        {{ form.email.label }}<br/>
+                        {{ form.email(size=40, class="form-control", placeholder="eg. johnpaul@profile.com") }}<br/>
+                    </div>
+                    
+                    <div class ="formfields">
+                        {{ form.password.label }}<br/>
+                        {{ form.password(size=40, class="form-control") }}<br/>
+                    </div>
+                
+                    <span></span><br/>
+                    <button type="submit" name="submit" class="buttons btn btn-success " >Login</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock%}

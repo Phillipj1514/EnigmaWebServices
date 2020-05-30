@@ -1,0 +1,60 @@
+{% extends "base.html"%}
+
+{% block main%}
+<div class = "container d-flex justify-content-center">
+    <div class= "flex-row">
+        <div>
+            <h1>Merchant Registration</h1>
+        </div>
+        <div >
+            {% include "flash_messages.html"%}
+        </div>
+        <div>
+            <div class = "">
+                <form class = "form-group" method="POST" enctype="multipart/form-data" action="{{url_for('login')}}">
+                    {{ form.csrf_token }}
+                    <div class ="formfields">
+                        {{ form.name.label }}<br/>
+                        {{ form.name(size=40, class="form-control") }}<br/>
+                    </div>
+
+                    <div class ="formfields">
+                        {{ form.address.label }}<br/>
+                        {{ form.address(size=40,class="form-control") }}<br/>
+                    </div>
+
+                    <div class ="formfields">
+                        {{ form.location.label }}<br/>
+                        {{ form.location(size=40, class="form-control", placeholder="eg. Kingston, Jamacia") }}<br/>
+                    </div>
+                
+                    <div class ="formfields">
+                        {{ form.email.label }}<br/>
+                        {{ form.email(size=40, class="form-control", placeholder="eg. johnpaul@profile.com") }}<br/>
+                    </div>
+                    <div class ="formfields">
+                        {{ form.estWaitTime.label }}<br/>
+                        {{ form.estWaitTime(size=40, class="form-control") }}<br/>
+                    </div>
+                    <div class ="formfields">
+                        {{ form.password.label }}<br/>
+                        {{ form.password(size=40, class="form-control") }}<br/>
+                    </div>
+                    <div class ="formfields">
+                        {{ form.confirmPassword.label }}<br/>
+                        {{ form.confirmPassword(size=40, class="form-control") }}<br/>
+                    </div>
+                    <div class ="formfields">
+                        {{ form.logo.label }}<br>
+                        {{ form.logo(class="form-control-file") }}
+                    </div><br>
+                    <span></span><br/>
+                    <button type="submit" name="submit" class="buttons btn btn-success " >Create Account</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock%}

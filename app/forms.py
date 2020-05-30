@@ -11,7 +11,7 @@ class MerchantLogin(FlaskForm):
         validators=[DataRequired(), Email(), InputRequired()], 
         description="123@abc.com")
 
-    password = StringField('Password', 
+    password = PasswordField('Password', 
         validators=[DataRequired(), InputRequired()])
 
 
