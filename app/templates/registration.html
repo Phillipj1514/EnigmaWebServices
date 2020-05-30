@@ -13,7 +13,7 @@
         </div>
         <div>
             <div class = "">
-                <form class = "form-group" method="POST" enctype="multipart/form-data" action="{{url_for('login')}}">
+                <form class = "form-group" method="POST" enctype="multipart/form-data" >
                     {{ form.csrf_token }}
                     <div class ="formfields">
                         {{ form.name.label }}<br/>
