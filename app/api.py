@@ -178,11 +178,58 @@ def addCustomerTOLine(merchant_id):
         line.count+=1
         line.queue+=str(customer.id)+","
         db.session.commit()
-        return successResponse("customer add to line") 
+        result = {"result":"customer add to line",
+            "code": customer_code,
+            "wait-time": customer.waitTime
+        }
+        return successResponse(result) 
     return errorResponse("customer wasnt added"),400
-    
 
-    
+# add customer to merchant's  line
+@app.route('/api/<merchant_id>', methods=['GET'])
+def getMerchantDetails(merchant_id):
+    merchant = Merchant.query.filter_by(id=merchant_id).first()
+    line =  Line.query.filter_by(merchantID=merchant_id).first()
+    lineDetails = {}
+    if(not line is None):
+        customerInLine = []
+        customers = line.queue.split(",")
+        customers = [int(i) for i in customers if i.isdigit()] 
+        for customerID in customers:
+            customer = Customer.query.filter_by(id=int(customerID)).first()
+            if(not customer is None):
+                cDetails={
+                    "id":customer.id,
+                    "merchantID": customer.merchantID,
+                    "queueID": customer.queueID,
+                    "code": customer.code,
+                    "position": customer.position,
+                    "wait-time": customer.waitTime
+                }
+                customerInLine.append(cDetails)
+
+        lineDetails = {
+            "merchantID": line.merchantID,
+            "id": line.id,
+            "default-wait-time":line.waitTime,
+            "count": line.count,
+            "queue": customerInLine
+        }
+    if(not merchant is None ):
+        logofile = "uploads/"+merchant.logo
+        mDetail = {
+            "id": merchant.id,
+            "name": merchant.name,
+            "address": merchant.address,
+            "location": merchant.location,
+            "logo-image":url_for('static', filename=logofile, _external=True),
+            "email": merchant.email,
+            "estimated-Wait-Time":merchant.estimatedWaitTime,
+            "joined-on": merchant.joined_on.strftime("%m/%d/%Y, %H:%M:%S"),
+            "line": lineDetails
+        }
+        return successResponse(mDetail)
+    return errorResponse("something went wrong")
 
 
 @app.route('/api/line', methods=['GET'])
