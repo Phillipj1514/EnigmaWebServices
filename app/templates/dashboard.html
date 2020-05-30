@@ -39,7 +39,7 @@
                         <tr>
                             <th scope="row">{{customer.code}}</th>
                             <td>00:{{customer.wait_time}}</td>
-                            <td class="number">{{customer.position}} <a href="{{url_for('/chat')+'/{0}'.format(customer.id)}}" role="button" class="btn btn-success my-2 my-sm-0 ml-3">Speak with customer</a></td>
+                            <td class="number">{{customer.position}} <a href="{{url_for('clientsupport', customerid=customer.id)}}" role="button" class="btn btn-success my-2 my-sm-0 ml-3">Speak with customer</a></td>
                             <td></td>
                           </tr>
                         {%endfor%} 

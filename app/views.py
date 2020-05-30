@@ -195,12 +195,12 @@ def checkTicket():
     flash_errors(checkingForm)
     return render_template('checkTicket.html', form= checkingForm)
 
-@app.route('/chat/<customer_id>',methods=['POST', 'GET'])
+@app.route('/chat/<customerid>',methods=['POST', 'GET'])
 @login_required
-def clientsupport(customer_id):
+def clientsupport(customerid):
     messageForm = MessageForm()
     msgs = []
-    customer = Customer.query.filter_by(id=customer_id).first()
+    customer = Customer.query.filter_by(id=customerid).first()
     chat = Chats.query.filter_by(id=customer.chatID).first()
     if(not chat is None):
         msg = chat.messages.split(",")
