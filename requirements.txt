@@ -14,7 +14,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.1
 MarkupSafe==1.1.1
 WTForms==2.2.1
-PyJWT==1.7.1
+PyJWT==2.4.0
 Flask-JWT==0.3.2
 
 # ----------------------
